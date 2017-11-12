@@ -23,6 +23,8 @@ class Sequence(nn.Module):
         c_t2 = Variable(torch.zeros(input.size(0), 51).double(), requires_grad=False)
 
         for i, input_t in enumerate(input.chunk(input.size(1), dim=1)):
+            # i = [0..999], input_t is a vector of size 97 and contains value for each
+            # time series at index i
             h_t, c_t = self.lstm1(input_t, (h_t, c_t))
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
             output = self.linear(h_t2)
