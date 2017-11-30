@@ -17,6 +17,8 @@ class Sequence(nn.Module):
 
     def forward(self, input, future = 0):
         outputs = []
+        print(input.size())
+        # torch.Size([97, 999])
         h_t = Variable(torch.zeros(input.size(0), 51).double(), requires_grad=False)
         c_t = Variable(torch.zeros(input.size(0), 51).double(), requires_grad=False)
         h_t2 = Variable(torch.zeros(input.size(0), 51).double(), requires_grad=False)
@@ -24,7 +26,7 @@ class Sequence(nn.Module):
 
         for i, input_t in enumerate(input.chunk(input.size(1), dim=1)):
             # i = [0..999], input_t is a vector of size 97 and contains value for each
-            # time series at index i
+            # time series at time index i
             h_t, c_t = self.lstm1(input_t, (h_t, c_t))
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
             output = self.linear(h_t2)
