@@ -30,6 +30,8 @@ class Sequence(nn.Module):
             h_t, c_t = self.lstm1(input_t, (h_t, c_t))
             h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
             output = self.linear(h_t2)
+            print(output.size())
+            # torch.Size([97, 1])
             outputs += [output]
         for i in range(future):# if we should predict the future
             h_t, c_t = self.lstm1(output, (h_t, c_t))
@@ -47,6 +49,8 @@ if __name__ == '__main__':
     torch.manual_seed(0)
     # load data and make training set
     data = torch.load('traindata.pt')
+    # we have 100 sine curves of different offsets, we use 97 to
+    # train and the remaining 3 to test/plot
     input = Variable(torch.from_numpy(data[3:, :-1]), requires_grad=False)
     target = Variable(torch.from_numpy(data[3:, 1:]), requires_grad=False)
     test_input = Variable(torch.from_numpy(data[:3, :-1]), requires_grad=False)
